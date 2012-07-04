@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<link rel="stylesheet" type="text/css" href="css/site.css"/>
+
+	<script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="javascripts/jquery-ui-1.8.21.custom.min.js"></script>
+	<script type="text/javascript" src="javascripts/jquery.tmpl.js"></script>
+	<script type="text/javascript" src="javascripts/site.js"></script>
+
+	<script type="text/html" id="tmpLogin">
+		<div class="overlap" id="loginContainer">
+
+					<form id="login" class="login">
+					    <h1>Entrar</h1>
+					    <fieldset id="loginInputs" class="inputs">
+					        <input id="loginUsername" class="username" type="text" placeholder="Nombre de Usuario" autofocus required>   
+					        <input id="loginPassword" class="password" type="password" placeholder="Contrase&ntilde;a" required>
+					    </fieldset>
+					    <fieldset id="loginActions" class="actions">
+					        <input type="submit" id="loginSubmit" class="submit" value="Entrar">
+					        <a href="#" id="loginNew">Registrar Nuevo Usuario</a>
+					    </fieldset>
+					</form>
+		</div>
+	</script>
+
+	<script type="text/html" id="tmpRegister">
+		<div class="overlap" id="registerContainer">
+
+					<form id="register"  class="login" style="height: 300px;">
+					    <h1>Registro</h1>
+					    <fieldset id="registerInputs" class="inputs">
+					        <input id="registerUsername" class="username" type="text" placeholder="Nombre de Usuario" autofocus required>   
+					        <input id="registerPassword" class="password" type="password" placeholder="Contrase&ntilde;a" required>
+					        <input id="registerPasswordConfirmation" class="password" type="password" placeholder="Confirmaci&oacute;n Contrase&ntilde;a" required>
+					    </fieldset>
+					    <fieldset id="registerActions" class="actions">
+					        <input type="submit" id="registerSubmit" class="submit" value="Entrar">
+					        <a href="#" id="registerClose">Cancelar</a>
+					    </fieldset>
+					</form>
+		</div>
+	</script>
+
+
+	<script type="text/javascript">
+
+		$(function(){
+			showLogInForm();
+		});
+	</script>
+</head>
+
+<body>
+	<div id="wrapper">
+    <div id="upperPanel">
+        <div id="chat">
+            <ul id="listChat">
+                
+            </ul>
+        </div>
+        <div id="friends">
+            <ul id="friendsList">
+                
+            </ul>
+        </div>
+    </div>
+    <div id="bottomPanel">
+        <textarea id="inputMessage">
+        </textarea>
+        <button id="enviarMensaje">Enviar</button>
+    </div>
+</div>​​​​​​​​​​​​​
+</body>
+
+</html>
