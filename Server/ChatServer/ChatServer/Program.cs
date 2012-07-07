@@ -18,7 +18,7 @@ namespace ChatServer
             /// <summary>
         /// Store the list of online users. Wish I had a ConcurrentList. 
         /// </summary>
-        protected static ConcurrentDictionary<Usuario, string> OnlineUsers = new ConcurrentDictionary<Usuario, string>();
+        protected static ConcurrentDictionary<string, Usuario> OnlineUsers = new ConcurrentDictionary<string, Usuario>();
         private static SQLiteConnection conexion = new SQLiteConnection(@"Data Source=db.dba;");
         private static List<Usuario> usuarios = new List<Usuario>();
 
@@ -81,7 +81,7 @@ namespace ChatServer
             string list = "{\"type\": \"userList\", \"users\": [";
             int count = 1;
             int total = OnlineUsers.Keys.Count;
-            foreach (Usuario tmpUser in OnlineUsers.Keys)
+            foreach (Usuario tmpUser in OnlineUsers.Values)
             {
                 list += "{\"username\": \"" + tmpUser.username + "\"}";
                 if (count < total)
@@ -140,19 +140,16 @@ namespace ChatServer
 
             me.username = obj.username;
 
-            if (!usuarioAlreadyLogIn(me))
-            {
-                OnlineUsers.TryAdd(me, String.Empty);
+           OnlineUsers.TryAdd(me.username, me);
 
-                context.Send(getUserList());
+           context.Send(getUserList());
 
-                TellAllIamHere(me);
-            }
+           TellAllIamHere(me);
         }
 
         private static void TellAllIamHere(Usuario tmpUser)
         {
-            var users = OnlineUsers.Keys.Where(o => o.username != tmpUser.username).ToArray();
+            var users = OnlineUsers.Values.Where(o => o.username != tmpUser.username).ToArray();
             Broadcast(Errores.NewUserLogIn(tmpUser.username, "ha iniciado sesion."), users);
         }
 
@@ -174,15 +171,15 @@ namespace ChatServer
                 string insertUser = "INSERT INTO usuarios(username, password) VALUES ('" + (string)obj.username + "','" + (string)obj.password + "')";
                 SQLiteCommand cmd = new SQLiteCommand(insertUser, conexion);
                 int result = cmd.ExecuteNonQuery();
-                Usuario tmpUsuario = new Usuario();
+                Usuario tmpUsuario = new Usuario { Context = context };
 
                 tmpUsuario.username = (string)obj.username;
 
-                if (!usuarioAlreadyLogIn(tmpUsuario))
-                {
-                    OnlineUsers.TryAdd(tmpUsuario, String.Empty);
+                //if (!usuarioAlreadyLogIn(tmpUsuario))
+                //{
+                    OnlineUsers.TryAdd(tmpUsuario.username, tmpUsuario);
                     //usuarios.Add(tmpUsuario);
-                }
+                //}
 
                 conexion.Close();
                 context.Send(Errores.SuccessNewUser("Usuario Creado exitosamente.", (string)obj.username, (string)obj.password));
@@ -210,11 +207,11 @@ namespace ChatServer
             try
             {
                 Console.WriteLine("Client Disconnected : " + context.ClientAddress);
-                var user = OnlineUsers.Keys.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
+                var user = OnlineUsers.Values.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
 
-                string trash; // Concurrent dictionaries make things weird
+                //object trash; // Concurrent dictionaries make things weird
 
-                OnlineUsers.TryRemove(user, out trash);
+                OnlineUsers.TryRemove(user.username, out user);
 
                 if (!String.IsNullOrEmpty(user.username))
                 {
@@ -252,13 +249,13 @@ namespace ChatServer
             }
             else
             {
-                Usuario tmpUsuario = new Usuario();
+                Usuario tmpUsuario = new Usuario { Context = context };
                 tmpUsuario.username = (string)obj.username;
 
-                if (!usuarioAlreadyLogIn(tmpUsuario))
-                {
-                    OnlineUsers.TryAdd(tmpUsuario, String.Empty);
-                }
+               // if (!usuarioAlreadyLogIn(tmpUsuario))
+               // {
+                OnlineUsers.TryAdd(tmpUsuario.username, tmpUsuario);
+               // }
                 context.Send(Errores.LogInSuccess("", (string)obj.username, (string)obj.password));
             }
             
@@ -285,7 +282,7 @@ namespace ChatServer
         /// <param name="aContext">The user's connection context</param>
         private static void NameChange(string name, UserContext aContext)
         {
-            var u = OnlineUsers.Keys.Where(o => o.Context.ClientAddress == aContext.ClientAddress).Single();
+            var u = OnlineUsers.Values.Where(o => o.Context.ClientAddress == aContext.ClientAddress).Single();
 
             if (ValidateName(name)) { 
                 var r = new Response
@@ -296,7 +293,7 @@ namespace ChatServer
                 Broadcast(JsonConvert.SerializeObject(r));
 
                 u.username = name;
-                OnlineUsers[u] = name;
+                OnlineUsers[name] = u;
 
                 Broadcast(getUserList());
             }
@@ -326,7 +323,7 @@ namespace ChatServer
             var r = new Response
                         {
                             Type = ResponseType.UserCount,
-                            Data = new {Users = OnlineUsers.Values.Where(o => !String.IsNullOrEmpty(o)).ToArray()}
+                            Data = new {Users = OnlineUsers.Keys.Where(o => !String.IsNullOrEmpty(o)).ToArray()}
                         };
             Broadcast(JsonConvert.SerializeObject(r));
         }
@@ -340,14 +337,14 @@ namespace ChatServer
         {
             if (users == null)
             {
-                foreach (var u in OnlineUsers.Keys)
+                foreach (var u in OnlineUsers.Values)
                 {
                     u.Context.Send(message);
                 }
             }
             else
             {
-                foreach (var u in OnlineUsers.Keys.Where(users.Contains))
+                foreach (var u in OnlineUsers.Values.Where(users.Contains))
                 {
                     u.Context.Send(message);
                 }

@@ -12,6 +12,7 @@ public class LoginErrorActivity extends Activity {
 	private TextView lblError;
 	private Button btnAceptar;
 	
+	
 	public LoginErrorActivity()
 	{
 		

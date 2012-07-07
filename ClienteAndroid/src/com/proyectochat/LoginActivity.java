@@ -2,7 +2,9 @@ package com.proyectochat;
 
 import Controladores.ChatController;
 import Models.LogInRequest;
+import Models.SimpleUser;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +28,7 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		controller.changeActivity(this);
 		setContentView(R.layout.login);
 		
 		txtUsername = (EditText)findViewById(R.id.txtUsername);
@@ -44,6 +47,10 @@ public class LoginActivity extends Activity {
 					
 					loginRequest.setUsername(txtUsername.getText().toString());
 					loginRequest.setPassword(txtPassword.getText().toString());
+					SimpleUser tmpUser = new SimpleUser();
+					tmpUser.setPassword(txtPassword.getText().toString());
+					tmpUser.setUsername(txtUsername.getText().toString());
+					controller.setCurrentUser(tmpUser);
 					
 					try {
 						controller.getWebsocket().send(gson.toJson(loginRequest));
@@ -61,8 +68,8 @@ public class LoginActivity extends Activity {
 		btnRegistrar.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
+				Intent openChat = new Intent("com.proyectochat.REGISTERACTIVITY");    	
+		    	controller.changeToIntent(openChat);				
 			}
 		});
 	}

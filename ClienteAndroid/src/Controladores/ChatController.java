@@ -9,24 +9,36 @@ import de.roderick.weberknecht.WebSocketMessage;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import Models.Respuesta;
+import Models.SimpleUser;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import com.proyectochat.ChatActivity;
 
-public class ChatController extends Activity {
+public class ChatController{
 	private URI url;
 	private WebSocket websocket;
-	Gson gson;
+	private Gson gson;
+	private Activity currentActivity;
+	private SimpleUser currentUser;
+	private ChatActivity chatActivity;
+
 	
     private ChatController() {
     	try
     	{
+    		this.gson = new GsonBuilder().setPrettyPrinting().create();
     		/* apagar StrictMode */
     		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -47,41 +59,45 @@ public class ChatController extends Activity {
                             {
 	                            Respuesta obj = new Respuesta();
 	                            //Type respuestaType = new TypeToken<Respuesta>() {}.getType();
+	                            
 	                            obj = gson.fromJson(message.getText(), Respuesta.class);
 	                         
-	                            if(obj.getType() == "logInSuccess")
+	                            if(obj.getType().equals("logInSuccess"))
 	                            {
 	                            	logInSuccess(obj);
 	                            }
-	                            else if(obj.getType() == "logInError")
+	                            else if(obj.getType().equals("logInError"))
 	                            {
 	                            	logInError(obj);
 	                            }
-	                            else if(obj.getType() == "logInErrorUserExists")
+	                            else if(obj.getType().equals("logInErrorUserExists"))
 	                            {
 	                            	logInErrorUserExists(obj);
 	                            }
 	
-	                            else if(obj.getType() == "successNewUser")
+	                            else if(obj.getType().equals("successNewUser"))
 	                            {
 	                            	successNewUser(obj);
 	                            }
 	
-	                            else if(obj.getType() == "userList")
+	                            else if(obj.getType().equals("userList"))
 	                            {
-	                            	loadUserList(obj);
+	                            	chatActivity.friends(obj);
 	                            }
-	                            else if(obj.getType() == "newUserLogIn")
+	                            else if(obj.getType().equals("newUserLogIn"))
 	                            {
-	                            	newUserLogIn(obj);
-	                            }
-	
-	                            else if(obj.getType() == "message")
-	                            {
-	                            	_menssage(obj);
+	                            	chatActivity.newUserLogIn(obj);
 	                            }
 	
-	                            else if(obj.getType() == "disconnect")
+	                            else if(obj.getType().equals("message"))
+	                            {
+	                            	if(getChatActivity() != null)
+	                            	{
+	                            		getChatActivity()._message(obj);
+	                            	}
+	                            }
+	
+	                            else if(obj.getType().equals("disconnect"))
 	                            {
 	                            	disconnect(obj);
 	                            }
@@ -114,32 +130,26 @@ public class ChatController extends Activity {
     {
     	
     }
-    
-    public void _menssage(Respuesta obj)
-    {
-    	
-    }
+
     
     public void newUserLogIn(Respuesta obj)
     {
     	
     }
-    
-    public void loadUserList(Respuesta obj)
-    {
-    	
-    }
+ 
     
     public void logInSuccess(Respuesta obj)
     {
+    	Intent openChat = new Intent("com.proyectochat.CHATACTIVITY");
     	
+    	changeToIntent(openChat);
     }
     
     public void logInError(Respuesta obj)
     {
     	Intent openLoginError = new Intent("com.proyectochat.LOGINERRORACTIVITY");
     	
-    	startActivity(openLoginError);
+    	changeToIntent(openLoginError);
     }
     
     public void logInErrorUserExists(Respuesta obj)
@@ -149,11 +159,25 @@ public class ChatController extends Activity {
     
     public void successNewUser(Respuesta obj)
     {
+    	SimpleUser tmpUser = new SimpleUser();
+		tmpUser.setPassword(obj.getPassword());
+		tmpUser.setUsername(obj.getUsername());
+		setCurrentUser(tmpUser);
+		
     	Intent openChat = new Intent("com.proyectochat.CHATACTIVITY");
     	
-    	startActivity(openChat);
+    	changeToIntent(openChat);
     }
     
+    public void changeToIntent(Intent intent)
+    {
+    	this.currentActivity.startActivity(intent);
+    }
+    
+    public void changeActivity(Activity newAct)
+    {
+    	this.currentActivity = newAct;
+    }
     /************* Área del singleton *********************/
 	
 	private static ChatController INSTANCE = null;
@@ -176,5 +200,21 @@ public class ChatController extends Activity {
 
 	public void setWebsocket(WebSocket websocket) {
 		this.websocket = websocket;
+	}
+
+	public SimpleUser getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(SimpleUser currentUser) {
+		this.currentUser = currentUser;
+	}
+
+	public ChatActivity getChatActivity() {
+		return chatActivity;
+	}
+
+	public void setChatActivity(ChatActivity chatActivity) {
+		this.chatActivity = chatActivity;
 	}
 }

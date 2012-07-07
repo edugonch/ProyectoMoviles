@@ -5,7 +5,12 @@ public class SimpleUser {
 	protected String password;
 	protected String type;
 	
-	
+	public SimpleUser()
+	{
+		this.username = "";
+		this.password = "";
+		this.type = "";
+	}
 	public String getUsername() {
 		return username;
 	}

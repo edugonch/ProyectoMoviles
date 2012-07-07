@@ -21,3 +21,14 @@ H:\Universidad\Movil\Proyecto\Server\ChatServer\ChatServer\bin\Debug\Alchemy.pdb
 H:\Universidad\Movil\Proyecto\Server\ChatServer\ChatServer\bin\Debug\Newtonsoft.Json.pdb
 H:\Universidad\Movil\Proyecto\Server\ChatServer\ChatServer\bin\Debug\Newtonsoft.Json.xml
 H:\Universidad\Movil\Proyecto\Server\ChatServer\ChatServer\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\bin\Debug\ChatServer.exe.config
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\bin\Debug\ChatServer.exe
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\bin\Debug\ChatServer.pdb
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\bin\Debug\Alchemy.dll
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\bin\Debug\Alchemy.pdb
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\obj\x86\Debug\ChatServer.exe
+C:\Users\home\Documents\Universidad\Moviles\Proyectos\ProyectoMoviles\Server\ChatServer\ChatServer\obj\x86\Debug\ChatServer.pdb

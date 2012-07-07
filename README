@@ -1,0 +1,11 @@
+Servidor:
+
+Está hecho en C#, usando VS 2010 FrameWork 4, Librerías que utilizo son Alchemy para los webSockets, Newtonsoft.Json para el parser de JSON y 
+System.Data.Sqlite para la base de datos (usuarios)
+*** Las librerías se pueden encontrar en Server/ChatServer/libs
+
+Cliente Web: 
+Un cliente de prueba para poder depurar el server más rápidamente, completamente funcional hecho en Javascript con JQuery. (Optimizado para Chrome)
+
+Cliente Android:
+Copia funcionalidad para el cliente web usando librerías de webSockets, los jars utilizados se encuentran en ClienteAndroid/libs

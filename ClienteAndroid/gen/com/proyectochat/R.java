@@ -15,6 +15,7 @@ public final class R {
     }
     public static final class id {
         public static final int btnAceptar=0x7f050008;
+        public static final int btnCancelar=0x7f05000e;
         public static final int btnEntrar=0x7f050005;
         public static final int btnEnviar=0x7f05000c;
         public static final int btnRegistrar=0x7f050006;
